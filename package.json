@@ -1,0 +1,26 @@
+{
+  "name": "430apiproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Tests Complete\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Likewise42/430APIProject.git"
+  },
+  "author": "ryan muskopf",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Likewise42/430APIProject/issues"
+  },
+  "homepage": "https://github.com/Likewise42/430APIProject#readme",
+	"devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0"
+  }
+}
