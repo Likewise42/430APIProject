@@ -18,8 +18,8 @@
     "url": "https://github.com/Likewise42/430APIProject/issues"
   },
   "homepage": "https://github.com/Likewise42/430APIProject#readme",
-	"devDependencies": {
-    "eslint": "^3.15.0",
+  "devDependencies": {
+    "eslint": "^3.17.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0"
   }
