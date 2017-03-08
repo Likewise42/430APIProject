@@ -69,14 +69,18 @@ const upload = (request, response, body) => {
 
   let responseCode = 201;
 
-  if (images[body.name]) {
+  if (images[body.title]) {
     responseCode = 204;
   } else {
-    images[body.name] = {};
+    images[body.title] = {};
   }
 
-  images[body.name].name = body.name;
-  images[body.name].age = body.age;
+  images[body.title].title = body.title;
+  images[body.title].link = body.link;
+  images[body.title].author = body.author;
+  if (body.words) {
+    images[body.title].words = body.words;
+  }
 
   etag = crypto.createHash('sha1').update(JSON.stringify(images));
   digest = etag.digest('hex');
@@ -89,6 +93,21 @@ const upload = (request, response, body) => {
   return respondMeta(request, response, responseCode);
 };
 module.exports.upload = upload;
+
+// ryan muskopf http assignment 2
+// get
+const getImages = (request, response) => {
+  const responseJSON = {
+    images,
+  };
+
+  if (request.headers['if-none-match'] === digest) {
+    return respondMeta(request, response, 304);
+  }
+
+  return respond(request, response, 200, responseJSON);
+};
+module.exports.getImages = getImages;
 
 // ryan muskopf http assignment 2
 // not head and 304

@@ -8,15 +8,53 @@
 
       
       const parseJSON = (xhr, content) => {
+        content.innerHTML = '';
          //ryan muskopf http assignment 2
         const obj = JSON.parse(xhr.response);
-        console.dir(obj);
+        if(obj.message){
+          content.innerHTML = obj.message;
+        }
         
-        //put json to html conversion
-        
+        if(obj.images){
+          let keys = Object.keys(obj.images);
+            
+          for(let i=0; i<keys.length; i++){
+            const imagesCall = obj.images[keys[i]];
+            console.log(imagesCall);
+            
+            //create elements
+            let topEle = document.createElement("div");
+            let imgEle = document.createElement("img");
+            let titleEle = document.createElement("h1");
+            let authorEle = document.createElement("h2");
+            let keyEle = document.createElement("p");
+            
+            //add content to elements
+            imgEle.src = imagesCall.link;
+            titleEle.innerHTML = `Title: ${imagesCall.title}`;
+            authorEle.innerHTML = `Author: ${imagesCall.author}`;
+            keyEle.innerHTML = `Key Words: ${imagesCall.words}`;
+            
+            //append elements
+            topEle.appendChild(imgEle);
+            topEle.appendChild(titleEle);
+            topEle.appendChild(authorEle);
+            topEle.appendChild(keyEle);
+            content.appendChild(topEle);
+          }
+        }
       };
       
-      const handleResponse = (xhr) => {
+      const handleResponseUpload = (xhr) => {
+         //ryan muskopf http assignment 2
+        const content = document.querySelector('#content');
+        
+        console.log(xhr.status);
+        
+        parseJSON(xhr, content);
+      };
+
+      const handleResponseGet = (xhr) => {
          //ryan muskopf http assignment 2
         const content = document.querySelector('#content');
         
@@ -44,10 +82,10 @@
         xhr.setRequestHeader('Accept', 'application/json');
         
         xhr.onload = () =>{
-          handleResponse(xhr);
+          handleResponseUpload(xhr);
         };
         
-        const formData = `link=${linkField.value}&title=${titleField.value}&author=${authorField.value}&word=${wordField.value}`;
+        const formData = `link=${linkField.value}&title=${titleField.value}&author=${authorField.value}&words=${wordField.value}`;
         
         console.log(formData);
         xhr.send(formData);
@@ -58,13 +96,10 @@
 
       const get = (e, getForm) => {
         //ryan muskopf http assignment 2
-        const action = uploadForm.getAttribute('action');
-        const method = uploadForm.getAttribute('method');
+        const action = getForm.getAttribute('action');
+        const method = getForm.getAttribute('method');
         
-        const linkField = uploadForm.querySelector('#linkField');
-        const titleField = uploadForm.querySelector('#titleField');
-        const authorField = uploadForm.querySelector('#authorField');
-        const wordField = uploadForm.querySelector('#wordField');
+        const searchField = getForm.querySelector('#searchField');
         
         const xhr = new XMLHttpRequest();
         
@@ -75,10 +110,10 @@
         xhr.setRequestHeader('Accept', 'application/json');
         
         xhr.onload = () =>{
-          handleResponse(xhr);
+          handleResponseGet(xhr);
         };
         
-        const formData = `link=${linkField.value}&title=${titleField.value}&author=${authorField.value}&word=${wordField.value}`;
+        const formData = `search=${searchField.value}`;
         
         console.log(formData);
         xhr.send(formData);
@@ -98,7 +133,11 @@
         uploadForm.addEventListener('submit', uploadData);
         
         //event when you try to get info
-        const 
+        const getForm = document.querySelector('#getForm');
+        const getData = (e) =>{
+          get(e,getForm);
+        };
+        getForm.addEventListener('submit', getData);
       };
       
       window.onload = init;
@@ -107,10 +146,10 @@
   <body>
 <!--    used references from ryan muskopf http assignment 2-->
     <form id="uploadForm" action="/upload" method="post">
-      <label for="link">Image Link: </label>
-      <input id="linkField" type="text" name="link" />
       <label for="title">Title: </label>
       <input id="titleField" type="text" name="title" />
+      <label for="link">Image Link: </label>
+      <input id="linkField" type="text" name="link" />
       <label for="author">Author: </label>
       <input id="authorField" type="text" name="author" />
       <label for="word">Key Words: </label>
@@ -118,8 +157,8 @@
       <input type="submit" value="Upload Image" />
     </form>
     <form id="getForm" action="/getImages" method="get">
-      <label for="word">Search: </label>
-      <input id="wordField" type="text" name="word" />
+      <label for="search">Search: </label>
+      <input id="searchField" type="text" name="search" value="Search Does Not Work Yet"/>
       <input type="submit" value="Get Images" />
     </form>
     <section id="content">

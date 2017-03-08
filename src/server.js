@@ -18,8 +18,8 @@ const onRequest = (request, response) => {
       responseHandler.getIndex(request, response);
     } else if (parsedUrl.pathname === '/style.css') {
       responseHandler.getStyle(request, response);
-    // } else if (parsedUrl.pathname === '/') {
-      // responseHandler.getU(request, response);
+    } else if (parsedUrl.pathname === '/getImages') {
+      responseHandler.getImages(request, response);
     } else {
       responseHandler.notFound(request, response);
     }
@@ -46,7 +46,6 @@ const onRequest = (request, response) => {
 
     request.on('end', () => {
       console.log(Buffer.concat(body).toString());
-
 
       const bodyString = Buffer.concat(body).toString();
 
