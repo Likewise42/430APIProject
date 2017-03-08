@@ -1,13 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>a server</title>
-		<link rel="stylesheet" type="text/css" href="/style.css">
-  	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
-		<script type="text/babel">
-			
-		</script>
-	</head>
-	<body>
-	</body>
+  <head>
+    <title>a server</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script type="text/babel">
+
+      
+      const parseJSON = (xhr, content) => {
+         //ryan muskopf http assignment 2
+        const obj = JSON.parse(xhr.response);
+        console.dir(obj);
+        
+        //put json to html conversion
+        
+      };
+      
+      const handleResponse = (xhr) => {
+         //ryan muskopf http assignment 2
+        const content = document.querySelector('#content');
+        
+        console.log(xhr.status);
+        
+        parseJSON(xhr, content);
+      };
+
+      const upload = (e, uploadForm) => {
+        //ryan muskopf http assignment 2
+        const action = uploadForm.getAttribute('action');
+        const method = uploadForm.getAttribute('method');
+        
+        const linkField = uploadForm.querySelector('#linkField');
+        const titleField = uploadForm.querySelector('#titleField');
+        const authorField = uploadForm.querySelector('#authorField');
+        const wordField = uploadForm.querySelector('#wordField');
+        
+        const xhr = new XMLHttpRequest();
+        
+        xhr.open(method, action);
+        
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        
+        xhr.setRequestHeader('Accept', 'application/json');
+        
+        xhr.onload = () =>{
+          handleResponse(xhr);
+        };
+        
+        const formData = `link=${linkField.value}&title=${titleField.value}&author=${authorField.value}&word=${wordField.value}`;
+        
+        console.log(formData);
+        xhr.send(formData);
+        
+        e.preventDefault();
+        return false;
+      };
+
+      const get = (e, getForm) => {
+        //ryan muskopf http assignment 2
+        const action = uploadForm.getAttribute('action');
+        const method = uploadForm.getAttribute('method');
+        
+        const linkField = uploadForm.querySelector('#linkField');
+        const titleField = uploadForm.querySelector('#titleField');
+        const authorField = uploadForm.querySelector('#authorField');
+        const wordField = uploadForm.querySelector('#wordField');
+        
+        const xhr = new XMLHttpRequest();
+        
+        xhr.open(method, action);
+        
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        
+        xhr.setRequestHeader('Accept', 'application/json');
+        
+        xhr.onload = () =>{
+          handleResponse(xhr);
+        };
+        
+        const formData = `link=${linkField.value}&title=${titleField.value}&author=${authorField.value}&word=${wordField.value}`;
+        
+        console.log(formData);
+        xhr.send(formData);
+        
+        e.preventDefault();
+        return false;
+      };
+      
+      const init = () => {
+        //ryan muskopf http assignment 2
+        
+        //event when the form gets uploaded
+        const uploadForm = document.querySelector('#uploadForm');
+        const uploadData = (e) => {
+          upload(e,uploadForm);
+        };
+        uploadForm.addEventListener('submit', uploadData);
+        
+        //event when you try to get info
+        const 
+      };
+      
+      window.onload = init;
+    </script>
+  </head>
+  <body>
+<!--    used references from ryan muskopf http assignment 2-->
+    <form id="uploadForm" action="/upload" method="post">
+      <label for="link">Image Link: </label>
+      <input id="linkField" type="text" name="link" />
+      <label for="title">Title: </label>
+      <input id="titleField" type="text" name="title" />
+      <label for="author">Author: </label>
+      <input id="authorField" type="text" name="author" />
+      <label for="word">Key Words: </label>
+      <input id="wordField" type="text" name="word" />
+      <input type="submit" value="Upload Image" />
+    </form>
+    <form id="getForm" action="/getImages" method="get">
+      <label for="word">Search: </label>
+      <input id="wordField" type="text" name="word" />
+      <input type="submit" value="Get Images" />
+    </form>
+    <section id="content">
+    </section>
+  </body>
 </html>
