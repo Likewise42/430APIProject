@@ -28,12 +28,18 @@
             let titleEle = document.createElement("h1");
             let authorEle = document.createElement("h2");
             let keyEle = document.createElement("p");
+						
+						topEle.classList.add('imgDiv');
             
             //add content to elements
             imgEle.src = imagesCall.link;
             titleEle.innerHTML = `Title: ${imagesCall.title}`;
             authorEle.innerHTML = `Author: ${imagesCall.author}`;
-            keyEle.innerHTML = `Key Words: ${imagesCall.words}`;
+						if(imagesCall.words){
+							keyEle.innerHTML = `Key Words: ${imagesCall.words}`;
+						}else{
+							keyEle.innerHTML = `Key Words: -`;
+						}
             
             //append elements
             topEle.appendChild(imgEle);
