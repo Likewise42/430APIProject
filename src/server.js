@@ -17,8 +17,8 @@ const onRequest = (request, response) => {
   console.log(parsedUrl.pathname);
   console.dir(params);
 
-	console.log(`method: ${request.method}`);
-	
+  console.log(`method: ${request.method}`);
+
   if (request.method === 'GET') {
     if (parsedUrl.pathname === '/') {
       responseHandler.getIndex(request, response);
@@ -31,9 +31,9 @@ const onRequest = (request, response) => {
     }
   } else if (request.method === 'HEAD') {
     if (parsedUrl.pathname === '/getImages') {
-     responseHandler.getImagesMeta(request, response);
+      responseHandler.getImagesMeta(request, response);
     } else {
-    responseHandler.notFoundMeta(request, response);
+      responseHandler.notFoundMeta(request, response);
     }
   } else if (request.method === 'POST' && parsedUrl.pathname === '/upload') {
     const res = response;

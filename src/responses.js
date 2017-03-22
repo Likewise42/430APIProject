@@ -118,28 +118,25 @@ const upload = (request, response, body) => {
     responseCode = 204;
   } else {
     images[body.title] = {};
-		
-		images[body.title].title = body.title;
-		images[body.title].searchWords = body.title;
 
-		images[body.title].link = body.link;
+    images[body.title].title = body.title;
+    images[body.title].searchWords = body.title;
 
-		images[body.title].author = body.author;
-		images[body.title].searchWords += ` ${body.author}`;
+    images[body.title].link = body.link;
 
-		if (body.words) {
-			images[body.title].words = body.words;
-			images[body.title].searchWords += ` ${body.words}`;
-		}
+    images[body.title].author = body.author;
+    images[body.title].searchWords += ` ${body.author}`;
 
-		images[body.title].searchWordsArray = images[body.title].searchWords.split(' ');
+    if (body.words) {
+      images[body.title].words = body.words;
+      images[body.title].searchWords += ` ${body.words}`;
+    }
 
-		// console.log(images[body.title].searchWordsArray);
-
-		etag = crypto.createHash('sha1').update(JSON.stringify(images));
-		digest = etag.digest('hex');
+    images[body.title].searchWordsArray = images[body.title].searchWords.split(' ');
+    etag = crypto.createHash('sha1').update(JSON.stringify(images));
+    digest = etag.digest('hex');
   }
-	
+
   if (responseCode === 201) {
     responseJSON.message = 'Uploaded Image Data Successfully';
     return respond(request, response, responseCode, responseJSON);
