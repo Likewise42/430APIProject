@@ -12,6 +12,10 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 const onRequest = (request, response) => {
   // parse the url
   const parsedUrl = url.parse(request.url);
+  const params = query.parse(parsedUrl.query);
+
+  console.log(parsedUrl.pathname);
+  console.dir(params);
 
   if (request.method === 'GET') {
     if (parsedUrl.pathname === '/') {
@@ -19,7 +23,7 @@ const onRequest = (request, response) => {
     } else if (parsedUrl.pathname === '/style.css') {
       responseHandler.getStyle(request, response);
     } else if (parsedUrl.pathname === '/getImages') {
-      responseHandler.getImages(request, response);
+      responseHandler.getImages(request, response, params);
     } else {
       responseHandler.notFound(request, response);
     }

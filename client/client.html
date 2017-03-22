@@ -49,7 +49,7 @@
          //ryan muskopf http assignment 2
         const content = document.querySelector('#content');
         
-        console.log(xhr.status);
+        //console.log(xhr.status);
         
         parseJSON(xhr, content);
       };
@@ -58,7 +58,8 @@
          //ryan muskopf http assignment 2
         const content = document.querySelector('#content');
         
-        console.log(xhr.status);
+        //console.log(xhr.status);
+        console.dir(xhr.response);
         
         parseJSON(xhr, content);
       };
@@ -87,7 +88,7 @@
         
         const formData = `link=${linkField.value}&title=${titleField.value}&author=${authorField.value}&words=${wordField.value}`;
         
-        console.log(formData);
+        //console.log(formData);
         xhr.send(formData);
         
         e.preventDefault();
@@ -96,10 +97,13 @@
 
       const get = (e, getForm) => {
         //ryan muskopf http assignment 2
-        const action = getForm.getAttribute('action');
+        let action = getForm.getAttribute('action');
         const method = getForm.getAttribute('method');
-        
         const searchField = getForm.querySelector('#searchField');
+        
+        action += `?searchTerms=${searchField.value}`;
+        
+        console.log(`action: ${action}`);
         
         const xhr = new XMLHttpRequest();
         
@@ -113,10 +117,12 @@
           handleResponseGet(xhr);
         };
         
-        const formData = `search=${searchField.value}`;
+        //const formData = `search=${searchField.value}`;
         
-        console.log(formData);
-        xhr.send(formData);
+        //console.log(formData);
+        //xhr.send(formData);
+        
+        xhr.send();
         
         e.preventDefault();
         return false;
@@ -158,7 +164,7 @@
     </form>
     <form id="getForm" action="/getImages" method="get">
       <label for="search">Search: </label>
-      <input id="searchField" type="text" name="search" value="Search Does Not Work Yet"/>
+      <input id="searchField" type="text" name="search"/>
       <input type="submit" value="Get Images" />
     </form>
     <section id="content">

@@ -36,7 +36,7 @@ const respond = (request, response, status, content) => {
     etag: digest,
   };
 
-  console.dir(content);
+  //console.dir(content);
 
   response.writeHead(status, headers);
   response.write(JSON.stringify(content));
@@ -60,7 +60,7 @@ const upload = (request, response, body) => {
     message: 'need title, link, and author',
   };
 
-  console.dir(body);
+  //console.dir(body);
 
   if (!body.link || !body.title || !body.author) {
     responseJSON.id = 'missing params';
@@ -76,11 +76,21 @@ const upload = (request, response, body) => {
   }
 
   images[body.title].title = body.title;
+  images[body.title].searchWords = body.title;
+
   images[body.title].link = body.link;
+  
   images[body.title].author = body.author;
+  images[body.title].searchWords += ` ${body.author}`;
+  
   if (body.words) {
     images[body.title].words = body.words;
+    images[body.title].searchWords += ` ${body.words}`;
   }
+  
+  images[body.title].searchWordsArray = images[body.title].searchWords.split(' ');
+
+  //console.log(images[body.title].searchWordsArray);
 
   etag = crypto.createHash('sha1').update(JSON.stringify(images));
   digest = etag.digest('hex');
@@ -96,18 +106,72 @@ module.exports.upload = upload;
 
 // ryan muskopf http assignment 2
 // get
-const getImages = (request, response) => {
-  const responseJSON = {
-    images,
-  };
+const getImages = (request, response, params) => {
+  console.log("in getImages")
+  let responseJSON = {};
+
+  if (params.searchTerms === '') {
+    responseJSON = {
+      images,
+    };
+  } else {
+    responseJSON = searchImages(params);
+  }
 
   if (request.headers['if-none-match'] === digest) {
     return respondMeta(request, response, 304);
   }
+  
+  console.dir(responseJSON);
 
   return respond(request, response, 200, responseJSON);
 };
 module.exports.getImages = getImages;
+
+const searchImages = (params) => {
+  console.log("in searchImages");
+  
+  console.log("params.searchTerms:")
+  console.dir(params);
+  const paramsArray = params.searchTerms;
+  const returnJSON = {};
+  returnJSON.images = {};
+
+  const keysImages = Object.keys(images);
+  const keysReturn = Object.keys(returnJSON);
+
+  // fucking mess
+  for (let i = 0; i < paramsArray.length; i++) {
+    console.log("i = "+i);
+    for (let j = 0; j < keysImages.length; j++) {
+      console.log("j = "+j);
+      const image = images[keysImages[j]];
+      for (let k = 0; k < image.searchWordsArray.length; k++) {
+        console.log("k = "+k);
+        console.log(`Are ${paramsArray[i]} and ${image.searchWordsArray[k]} the same?`)
+        if (paramsArray[i] === image.searchWordsArray[k]) {
+          let addJSON = true;
+
+          for (let l = 0; l < keysReturn.length; l++) {
+            console.log("l = "+l);
+            const rJSON = returnJSON[keysReturn[l]];
+            if (image === rJSON) {
+              addJSON = false;
+            }
+          }
+
+          if (addJSON) {
+            returnJSON.images[image.title] = image;
+          }
+        }
+      }
+    }
+  }
+
+  console.dir(returnJSON);
+
+  return returnJSON;
+};
 
 // ryan muskopf http assignment 2
 // not head and 304
