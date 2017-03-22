@@ -13,7 +13,7 @@ const searchImages = (params) => {
 
   console.log('params.searchTerms:');
   console.dir(params);
-  const paramsArray = params.searchTerms;
+  const paramsArray = params.searchTerms.split(' ');
   const returnJSON = {};
   returnJSON.images = {};
 
