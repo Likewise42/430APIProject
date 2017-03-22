@@ -118,28 +118,28 @@ const upload = (request, response, body) => {
     responseCode = 204;
   } else {
     images[body.title] = {};
+		
+		images[body.title].title = body.title;
+		images[body.title].searchWords = body.title;
+
+		images[body.title].link = body.link;
+
+		images[body.title].author = body.author;
+		images[body.title].searchWords += ` ${body.author}`;
+
+		if (body.words) {
+			images[body.title].words = body.words;
+			images[body.title].searchWords += ` ${body.words}`;
+		}
+
+		images[body.title].searchWordsArray = images[body.title].searchWords.split(' ');
+
+		// console.log(images[body.title].searchWordsArray);
+
+		etag = crypto.createHash('sha1').update(JSON.stringify(images));
+		digest = etag.digest('hex');
   }
-
-  images[body.title].title = body.title;
-  images[body.title].searchWords = body.title;
-
-  images[body.title].link = body.link;
-
-  images[body.title].author = body.author;
-  images[body.title].searchWords += ` ${body.author}`;
-
-  if (body.words) {
-    images[body.title].words = body.words;
-    images[body.title].searchWords += ` ${body.words}`;
-  }
-
-  images[body.title].searchWordsArray = images[body.title].searchWords.split(' ');
-
-  // console.log(images[body.title].searchWordsArray);
-
-  etag = crypto.createHash('sha1').update(JSON.stringify(images));
-  digest = etag.digest('hex');
-
+	
   if (responseCode === 201) {
     responseJSON.message = 'Uploaded Image Data Successfully';
     return respond(request, response, responseCode, responseJSON);
@@ -173,23 +173,12 @@ const getImages = (request, response, params) => {
 };
 module.exports.getImages = getImages;
 
-const getImagesMeta = (request, response, params) => {
-  console.log('in getImages');
-  let responseJSON = {};
-
-  if (params.searchTerms === '') {
-    responseJSON = {
-      images,
-    };
-  } else {
-    responseJSON = searchImages(params);
-  }
+const getImagesMeta = (request, response) => {
+  console.log('in getImagesMeta');
 
   if (request.headers['if-none-match'] === digest) {
     return respondMeta(request, response, 304);
   }
-
-  console.dir(responseJSON);
 
   return respondMeta(request, response, 200);
 };

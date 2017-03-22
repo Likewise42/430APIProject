@@ -112,10 +112,12 @@
         let action = getFormLocal.getAttribute('action');
         const method = getFormLocal.getAttribute('method');
 				console.log(method);
-        const searchField = getFormLocal.querySelector('.searchField');
+				if(getFormLocal.querySelector('.searchField')){
+					const searchField = getFormLocal.querySelector('.searchField');
         
-        action += `?searchTerms=${searchField.value}`;
-        
+					action += `?searchTerms=${searchField.value}`;
+				}
+       
         console.log(`action: ${action}`);
         
         const xhr = new XMLHttpRequest();
@@ -178,27 +180,27 @@
   </head>
   <body>
 <!--    used references from ryan muskopf http assignment 2-->
-    <form id="uploadForm" action="/upload" method="post">
-      <label for="title">Title: </label>
-      <input id="titleField" type="text" name="title" />
-      <label for="link">Image Link: </label>
-      <input id="linkField" type="text" name="link" />
-      <label for="author">Author: </label>
-      <input id="authorField" type="text" name="author" />
-      <label for="word">Key Words: </label>
-      <input id="wordField" type="text" name="word" />
-      <input type="submit" value="Upload Image" />
-    </form>
-    <form id="getForm" action="/getImages" method="get">
-      <label for="search">Search: </label>
-      <input class="searchField" type="text" name="search"/>
-      <input type="submit" value="Get Images" />
-    </form>
-		<form id="getFormHead" action="/getImages" method="head">
-			<label for="search">Search: </label>
-      <input class="searchField" type="text" name="search"/>
-			<input type="submit" value="Get Images Meta" />
-		</form>
+		<div id="top">
+			<form id="uploadForm" action="/upload" method="post">
+				<label for="title">Title: </label>
+				<input id="titleField" type="text" name="title" />
+				<label for="link">Image Link: </label>
+				<input id="linkField" type="text" name="link" />
+				<label for="author">Author: </label>
+				<input id="authorField" type="text" name="author" />
+				<label for="word">Key Words: </label>
+				<input id="wordField" type="text" name="word" />
+				<input type="submit" value="Upload Image" />
+			</form>
+			<form id="getForm" action="/getImages" method="get">
+				<label for="search">Search: </label>
+				<input class="searchField" type="text" name="search"/>
+				<input type="submit" value="Get Images" />
+			</form>
+			<form id="getFormHead" action="/getImages" method="head">
+				<input type="submit" value="Get Images Meta" />
+			</form>
+		</div>
     <section id="content">
     </section>
   </body>

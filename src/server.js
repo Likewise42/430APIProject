@@ -31,7 +31,7 @@ const onRequest = (request, response) => {
     }
   } else if (request.method === 'HEAD') {
     if (parsedUrl.pathname === '/getImages') {
-     responseHandler.getImagesMeta(request, response,params);
+     responseHandler.getImagesMeta(request, response);
     } else {
     responseHandler.notFoundMeta(request, response);
     }
