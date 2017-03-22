@@ -173,6 +173,27 @@ const getImages = (request, response, params) => {
 };
 module.exports.getImages = getImages;
 
+const getImagesMeta = (request, response, params) => {
+  console.log('in getImages');
+  let responseJSON = {};
+
+  if (params.searchTerms === '') {
+    responseJSON = {
+      images,
+    };
+  } else {
+    responseJSON = searchImages(params);
+  }
+
+  if (request.headers['if-none-match'] === digest) {
+    return respondMeta(request, response, 304);
+  }
+
+  console.dir(responseJSON);
+
+  return respondMeta(request, response, 200);
+};
+module.exports.getImagesMeta = getImagesMeta;
 // ryan muskopf http assignment 2
 // not head and 304
 const notFound = (request, response, params, type) => {
@@ -184,5 +205,8 @@ const notFound = (request, response, params, type) => {
 };
 module.exports.notFound = notFound;
 
-
+const notFoundMeta = (request, response) => {
+  respondMeta(request, response, 404);
+};
+module.exports.notFoundMeta = notFoundMeta;
 // 304 and head

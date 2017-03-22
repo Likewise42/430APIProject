@@ -64,6 +64,18 @@
         parseJSON(xhr, content);
       };
 
+			const handleResponseHead = (xhr) => {
+         //ryan muskopf http assignment 2
+        const content = document.querySelector('#content');
+        
+        //console.log(xhr.status);
+        console.dir(xhr);
+				content.innerHTML = `Status: ${xhr.status}` + '<br>';
+				content.innerHTML += `Status Text: ${xhr.statusText}` + '<br>';
+        
+        //parseJSON(xhr, content);
+      };
+
       const upload = (e, uploadForm) => {
         //ryan muskopf http assignment 2
         const action = uploadForm.getAttribute('action');
@@ -95,11 +107,12 @@
         return false;
       };
 
-      const get = (e, getForm) => {
+      const get = (e, getFormLocal) => {
         //ryan muskopf http assignment 2
-        let action = getForm.getAttribute('action');
-        const method = getForm.getAttribute('method');
-        const searchField = getForm.querySelector('#searchField');
+        let action = getFormLocal.getAttribute('action');
+        const method = getFormLocal.getAttribute('method');
+				console.log(method);
+        const searchField = getFormLocal.querySelector('.searchField');
         
         action += `?searchTerms=${searchField.value}`;
         
@@ -113,9 +126,16 @@
         
         xhr.setRequestHeader('Accept', 'application/json');
         
-        xhr.onload = () =>{
-          handleResponseGet(xhr);
-        };
+				if(method === "get"){
+					xhr.onload = () =>{
+						handleResponseGet(xhr);
+					};
+				} else{
+					xhr.onload = () =>{
+          	handleResponseHead(xhr);
+        	};
+				}
+        
         
         //const formData = `search=${searchField.value}`;
         
@@ -144,6 +164,13 @@
           get(e,getForm);
         };
         getForm.addEventListener('submit', getData);
+				
+				//event when you try to get info with head method
+        const getFormHead = document.querySelector('#getFormHead');
+        const getHeadData = (e) =>{
+          get(e,getFormHead);
+        };
+        getFormHead.addEventListener('submit', getHeadData);
       };
       
       window.onload = init;
@@ -164,9 +191,14 @@
     </form>
     <form id="getForm" action="/getImages" method="get">
       <label for="search">Search: </label>
-      <input id="searchField" type="text" name="search"/>
+      <input class="searchField" type="text" name="search"/>
       <input type="submit" value="Get Images" />
     </form>
+		<form id="getFormHead" action="/getImages" method="head">
+			<label for="search">Search: </label>
+      <input class="searchField" type="text" name="search"/>
+			<input type="submit" value="Get Images Meta" />
+		</form>
     <section id="content">
     </section>
   </body>
